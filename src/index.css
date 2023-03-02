@@ -1,0 +1,116 @@
+html {
+    background-color: lightgray;
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+.App{
+    width: 400px;
+    margin: 2em auto;
+    background-color: rgb(37, 37, 37);
+    border-radius: 5px;
+    color: white;
+}
+
+.cabecalho{
+    padding: 0.5em;
+    border-bottom: 1px solid black;
+}
+
+.cabecalho h1{
+    margin: 0;
+    text-align: center;
+}
+
+.principal{
+    padding: 1em;
+    margin: 0 2em;
+    border-bottom: 1px solid black;
+}
+
+.principal h2,
+.rodape-list h2{
+    text-align: center;
+    margin-top: 0;
+}
+
+.form-control{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+}
+
+.form-control label{
+    font-weight: bold;
+    font-size: .7em;
+    margin-bottom: .4em;
+}
+
+.form-control input{
+    border: 1px solid black;
+    border-radius: 2px;
+    background-color: rgb(14, 12, 12);
+    padding: .5em;
+    color: white;
+}
+
+input[type="submit"] {
+    background-color: rgb(14, 12, 12);;
+    color: lightgray;
+    display: block;
+    width: 100%;
+    border-radius: 5px;
+    padding: 1em;
+    cursor: pointer;
+}
+
+.rodape-list{
+    padding: 0 1em 2em;
+    margin: 1em 2em;
+}
+
+.rodape-list h2{
+    margin-bottom: 0;
+}
+
+.rodape-list p{
+    text-align: center;
+}
+
+.todo{
+    border-bottom: 1px solid darkgray;
+    padding: 1em 0;
+}
+
+.todo h3{
+    margin-bottom: .5em;
+}
+
+.todo-done{
+    text-decoration: line-through;
+    color: orangered;
+}
+
+.todo p{
+    text-align: left;
+    font-style: italic;
+    font-size: .7em;
+    margin-bottom: 1.5em;
+}
+
+.todo svg{
+    font-size: 1.2em;
+    cursor: pointer;
+    margin-right: 1em;
+    transition: .5s;
+}
+
+.todo svg:hover{
+    color: rgb(0, 47, 255);
+}
+
