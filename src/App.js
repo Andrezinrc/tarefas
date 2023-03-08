@@ -8,6 +8,7 @@ function App() {
 
   const [titulo, setTitulo] = useState("");
   const [tempo, settempo] = useState("");
+  const [id, setId] = useState(1);
   const [todos, setTodos] = useState([]);
   const [carregar, setCarregar] = useState(false);
 
@@ -36,7 +37,7 @@ function App() {
     event.preventDefault();
   
     const todo = {
-      id:  Math.random(),
+      id: setId((prevState) => prevState + 1),
       titulo,
       tempo,
       done: false,
@@ -68,7 +69,7 @@ function App() {
 
     todo.done = !todo.done;
 
-    const data = await fetch(API +  "/todos/" + todo.id, {
+    const response = await fetch(API +  "/todos/" + todo.id, {
       method: "PUT",
       body: JSON.stringify(todo),
       headers: {
@@ -76,13 +77,15 @@ function App() {
       },
     });
 
+    const data = await response.json()
+
     setTodos((prevState) => 
-      prevState.map((t) => (t.id === data.id ? (t = data) : t))
+      prevState.map((t) => (t.id === todo.id ? (t = data) : t))
     );
   }
 
   if(carregar){
-    return <p>Carregando...</p>
+    return <p className="carregamento">Carregando...</p>
   }
 
   return (
@@ -109,11 +112,12 @@ function App() {
         {todos.length === 0 && <p>Nao a tarefas</p>}
         {todos.map((todo) => (
             <div className="todo" key={todo.id}>
-              <h3 className={todo.done ? "todo-done" : ""}>{todo.titulo}</h3>
+              <h3 className={todo.done ? "todo-done" : ""}>
+                {todo.titulo}</h3>
               <p>Duracao: {todo.tempo}h</p>
               <div className="actions">
-                <span onClick={() => handleEdit(todos)}>
-                  {!todos.done ? <BsBookmarkCheck /> : <BsBookmarkCheckFill />}
+                <span onClick={() => handleEdit(todo)}>
+                  {!todo.done ? <BsBookmarkCheck /> : <BsBookmarkCheckFill />}
                 </span>
                 <BsTrash onClick={() => handleDelete(todo.id)}/>
               </div>
