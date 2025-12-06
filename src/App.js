@@ -2,86 +2,67 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import {BsTrash, BsBookmarkCheck, BsBookmarkCheckFill} from 'react-icons/bs';
 
-const API = "http://localhost:5000";
+//const API = "http://localhost:5000";
 
 function App() {
 
   const [titulo, setTitulo] = useState("");
   const [tempo, settempo] = useState("");
-  const [id, setId] = useState(1);
   const [todos, setTodos] = useState([]);
   const [carregar, setCarregar] = useState(false);
 
   useEffect(() => {
-
-
-    const loadData = async () => {
-
-      setCarregar(true)
-
-      const resposta = await fetch(API + "/todos")
-        .then((resposta) => resposta.json())
-        .then((data) => data)
-        .catch((erro) => console.log(erro));
-
-        setCarregar(false);
-
-        setTodos(resposta)
+    const loadData = () => {
+      setCarregar(true);
+      
+      const savedTodos = localStorage.getItem("todos-app-data");
+      
+      if (savedTodos) {
+        const parsedTodos = JSON.parse(savedTodos);
+        setTodos(parsedTodos);
+      }
+      
+      setCarregar(false);
     };
 
-    loadData()
-  },[])
-
+    loadData();
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
   
+    const newId = todos.length > 0 ? Math.max(...todos.map(todo => todo.id)) + 1 : 1;
+    
     const todo = {
-      id: setId((prevState) => prevState + 1),
+      id: newId,
       titulo,
       tempo,
       done: false,
     };
 
-    await fetch(API +  "/todos", {
-      method: "POST",
-      body: JSON.stringify(todo),
-      headers: {
-        "Content-Type": "application/json",
-      }
-    });
+    const newTodos = [...todos, todo];
+    setTodos(newTodos);
+    localStorage.setItem("todos-app-data", JSON.stringify(newTodos));
 
-    setTodos((prevState) => [...prevState, todo])
-
-    setTitulo("")
-    settempo("")
+    setTitulo("");
+    settempo("");
   };
 
   const handleDelete = async (id) => {
-    await fetch(API +  "/todos/" + id, {
-      method: "DELETE",
-    });
-
-    setTodos((prevState) => prevState.filter((todo) => todo.id !== id));
+    const newTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(newTodos);
+    localStorage.setItem("todos-app-data", JSON.stringify(newTodos));
   };
 
   const handleEdit = async(todo) => {
-
-    todo.done = !todo.done;
-
-    const response = await fetch(API +  "/todos/" + todo.id, {
-      method: "PUT",
-      body: JSON.stringify(todo),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const data = await response.json()
-
-    setTodos((prevState) => 
-      prevState.map((t) => (t.id === todo.id ? (t = data) : t))
+    const updatedTodo = {...todo, done: !todo.done};
+    
+    const newTodos = todos.map((t) => 
+      t.id === todo.id ? updatedTodo : t
     );
+    
+    setTodos(newTodos);
+    localStorage.setItem("todos-app-data", JSON.stringify(newTodos));
   }
 
   if(carregar){
